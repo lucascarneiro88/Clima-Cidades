@@ -3,7 +3,13 @@ import React from 'react'
 function Previsao() {
   return (
     <div>
-      Previsão
+     <h4>Previsão para as próximas horas</h4>
+     <ul>
+      <li>
+        <img src="" alt="" />
+        °C - descrição
+        </li>
+     </ul>
     </div>
   )
 }
