@@ -3,7 +3,10 @@ import React from 'react'
 function Clima() {
   return (
     <div>
-      Clima Atual
+    <h1>Nome:</h1>
+    <img src="" alt="" />
+    <p>°C</p>
+    <p>Descrição da temperatura:</p>
     </div>
   )
 }
