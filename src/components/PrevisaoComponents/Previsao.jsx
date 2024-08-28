@@ -1,17 +1,20 @@
-import React from 'react'
+import React from 'react';
 
-function Previsao() {
+const Previsao = ({ previsoes }) => {
   return (
     <div>
-     <h4>Previsão para as próximas horas</h4>
-     <ul>
-      <li>
-        <img src="" alt="" />
-        °C - descrição
-        </li>
-     </ul>
+      <h4>Previsão para as próximas horas</h4>
+      <ul>
+        {previsoes.map((previsao) => (
+          <li >
+             <img src="" alt="" />
+             °C - descrição
+           
+          </li>
+        ))}
+      </ul>
     </div>
-  )
-}
+  );
+};
 
-export default Previsao
+export default Previsao;
