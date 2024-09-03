@@ -1,16 +1,23 @@
 import React from "react";
+import { normalizarCidade } from "../../utils/normalizaCidade"; // Corrigido import
+import { BotaoBuscar, BuscaCidade, BuscaContainer } from "./BuscaStyles";
 
-function Busca({ cidade, setCidade, buscarClima }) { // Corrigido: desestruturando as props
+function Busca({ cidade, setCidade, buscarClima }) {
+  const handleBuscar = () => {
+    const cidadeNormalizada = normalizarCidade(cidade);
+    buscarClima(cidadeNormalizada);
+  }
+
   return (
-    <div>
-      <input
+    <BuscaContainer>
+      <BuscaCidade
         type="text"
         value={cidade}
         onChange={(e) => setCidade(e.target.value)}
-        placeholder="Digite uma cidade..." // Placeholder funcionando corretamente
+        placeholder="Digite uma cidade..."
       />
-      <button onClick={buscarClima}>Buscar</button>
-    </div>
+      <BotaoBuscar onClick={handleBuscar}>Buscar</BotaoBuscar>
+    </BuscaContainer>
   );
 }
 
