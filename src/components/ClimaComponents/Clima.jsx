@@ -1,5 +1,8 @@
 import React from 'react'
 
+
+import "./CimaStyles";
+
 function Clima({clima}) {
   return (
     <div>
