@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 import Busca from "./components/BuscaComponents/Busca";
@@ -11,8 +11,38 @@ function App() {
   const [cidade, setCidade] = useState(""); // string vazia para que seja inserido o nome da cidade
   const [clima, setClima] = useState(null); // array como null para indicar que ainda não há previsões do tempo disponíveis
   const [previsao, setPrevisao] = useState([]); // array vazio para tipo lista
+  const [localizacao, setLocalizacao] = useState(null); // Armazenar localização atual
 
   const apiKey = import.meta.env.VITE_API_KEY || ""; // VARIAVEL PARA BUSCAR DADOS
+
+  // useEffect para acessar a localização atual
+  useEffect(() => {
+    const obterLocalizacao = async () => {
+      try {
+        navigator.geolocation.getCurrentPosition(
+          async (position) => {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+
+            const resposta = await axios.get(
+              `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric&lang=pt_br`
+            );
+
+            setCidade(resposta.data.name);
+            setClima(resposta.data);
+            setLocalizacao({ lat, lon }); // Atualizar localização
+          },
+          (error) => {
+            console.log("Erro na obtenção da localização:", error.message);
+          }
+        );
+      } catch (error) {
+        console.log("Erro ao obter a localização:", error.message);
+      }
+    };
+
+    obterLocalizacao();
+  }, [apiKey]);
 
   // Função para buscar o clima
   const buscarClima = async () => {
@@ -33,6 +63,7 @@ function App() {
       }
     }
   };
+
   console.log(clima);
   console.log(previsao);
 
