@@ -1,6 +1,7 @@
 import React from "react";
 
 import "./PrevisaoStyles";
+import { PrevisaoContainer } from "./PrevisaoStyles";
 
 const Previsao = ({ previsoes }) => {
   if (!previsoes || previsoes.length === 0) {
@@ -8,7 +9,7 @@ const Previsao = ({ previsoes }) => {
   }
 
   return (
-    <div>
+    <PrevisaoContainer>
       <h4>Previsão para as próximas horas</h4>
       <ul>
         {previsoes.map((previsao) => (
@@ -17,13 +18,13 @@ const Previsao = ({ previsoes }) => {
               src={`http://openweathermap.org/img/wn/${previsao.weather[0].icon}.png`}
               alt={previsao.weather[0].description}
             />
-            <p>Temperatura: {previsao.main.temp}°C</p>
-            <p>Descrição da temperatura: {previsao.weather[0].description}</p>
-            <p>Hora da previsão: {new Date(previsao.dt * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+            <p>{previsao.main.temp}°C</p>
+            <p>{previsao.weather[0].description}</p> 
+            <p>{new Date(previsao.dt * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
           </li>
         ))}
       </ul>
-    </div>
+    </PrevisaoContainer>
   );
 };
 
