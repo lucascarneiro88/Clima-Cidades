@@ -5,7 +5,8 @@ import Busca from "./components/BuscaComponents/Busca";
 import Clima from "./components/ClimaComponents/Clima";
 import Previsao from "./components/PrevisaoComponents/Previsao";
 
-import { Titulo } from "./AppStyles";
+import { Titulo, ClimaContainer  } from "./AppStyles";
+
 
 function App() {
   const [cidade, setCidade] = useState(""); // string vazia para que seja inserido o nome da cidade
@@ -23,6 +24,8 @@ function App() {
           async (position) => {
             const lat = position.coords.latitude;
             const lon = position.coords.longitude;
+
+            console.log(`Latitude: ${lat}, Longitude: ${lon}`); 
 
             const resposta = await axios.get(
               `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric&lang=pt_br`
@@ -64,16 +67,16 @@ function App() {
     }
   };
 
-  console.log(clima);
-  console.log(previsao);
+  // console.log(clima);
+  // console.log(previsao);
 
   return (
-    <div>
+    <ClimaContainer>
       <Titulo>Condições Climáticas</Titulo>
       <Busca cidade={cidade} setCidade={setCidade} buscarClima={buscarClima} />
       {clima && <Clima clima={clima} />}
       {previsao.length > 0 && <Previsao previsoes={previsao} />}
-    </div>
+    </ClimaContainer>
   );
 }
 
