@@ -8,6 +8,7 @@ const axiosInstance = axios.create({
     units: "metric", // Unidades de medida da Api
     lang: "pt_br", // Idioma
   },
+ 
 });
 
 export default axiosInstance;
