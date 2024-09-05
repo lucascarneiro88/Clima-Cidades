@@ -1,12 +1,12 @@
 import React from "react";
-import { normalizarCidade } from "../../utils/normalizaCidade"; // Corrigido import
+import { normalizarCidade } from "../../utils/normalizaCidade";
 import { BotaoBuscar, BuscaCidade, BuscaContainer } from "./BuscaStyles";
 
 function Busca({ cidade, setCidade, buscarClima }) {
   const handleBuscar = () => {
     const cidadeNormalizada = normalizarCidade(cidade);
     buscarClima(cidadeNormalizada);
-  }
+  };
 
   return (
     <BuscaContainer>

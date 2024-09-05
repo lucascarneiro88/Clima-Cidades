@@ -1,6 +1,4 @@
-// import axios from "axios";
 import { useState, useEffect } from "react";
-
 import axiosInstance from "./utils/axiosInstance";
 
 import Busca from "./components/BuscaComponents/Busca";
@@ -10,12 +8,12 @@ import Previsao from "./components/PrevisaoComponents/Previsao";
 import { Titulo, ClimaContainer } from "./AppStyles";
 
 function App() {
-  const [cidade, setCidade] = useState(""); // string vazia para que seja inserido o nome da cidade
-  const [clima, setClima] = useState(null); // array como null para indicar que ainda não há previsões do tempo disponíveis
-  const [previsao, setPrevisao] = useState([]); // array vazio para tipo lista
-  const [localizacao, setLocalizacao] = useState(null); // Armazenar localização atual
+  const [cidade, setCidade] = useState("");
+  const [clima, setClima] = useState(null);
+  const [previsao, setPrevisao] = useState([]);
+  const [localizacao, setLocalizacao] = useState(null);
+  const [erro, setErro] = useState("");
 
-  // useEffect para acessar a localização atual
   useEffect(() => {
     const obterLocalizacao = async () => {
       try {
@@ -24,29 +22,33 @@ function App() {
             const lat = position.coords.latitude;
             const lon = position.coords.longitude;
 
-            console.log(`Latitude: ${lat}, Longitude: ${lon}`);
-
             const resposta = await axiosInstance.get(`/weather`, {
               params: { lat, lon },
             });
 
             setCidade(resposta.data.name);
             setClima(resposta.data);
-            setLocalizacao({ lat, lon }); // Atualizar localização
+            setLocalizacao({ lat, lon });
+            setErro(""); // Limpa erros
           },
           (error) => {
-            console.log("Erro na obtenção da localização:", error.message);
+            setErro(
+              "Não foi possível obter sua localização. Verifique as permissões do navegador."
+            );
+            // Limpa o erro após 5 segundos
+            setTimeout(() => setErro(""), 5000);
           }
         );
       } catch (error) {
-        console.log("Erro ao obter a localização:", error.message);
+        setErro("Erro ao tentar obter a localização. Tente novamente.");
+        setTimeout(() => setErro(""), 5000);
       }
     };
 
     obterLocalizacao();
   }, []);
+  
 
-  // Função para buscar o clima
   const buscarClima = async () => {
     try {
       const respostaClima = await axiosInstance.get(`/weather`, {
@@ -57,18 +59,24 @@ function App() {
       });
 
       setClima(respostaClima.data);
-      setPrevisao(respostaPrevisao.data.list.slice(0, 5)); // busca as primeira 5 proximas previsões da lista
+      setPrevisao(respostaPrevisao.data.list.slice(0, 5));
+      setErro(""); // Limpa erros
     } catch (error) {
       if (error.response) {
-        console.log("Erro na API:", error.response.status, error.response.data);
+        if (error.response.status === 404) {
+          setErro("Cidade não encontrada. Verifique o nome e tente novamente.");
+        } else {
+          setErro(
+            "Ocorreu um erro ao buscar as informações climáticas. Tente novamente."
+          );
+        }
+        setTimeout(() => setErro(""), 5000);
       } else {
-        console.log("Erro na requisição:", error.message);
+        setErro("Erro na busca. Tente novamente.");
+        setTimeout(() => setErro(""), 5000);
       }
     }
   };
-
-  // console.log(clima);
-  // console.log(previsao);
 
   return (
     <ClimaContainer>
@@ -76,12 +84,7 @@ function App() {
       <Busca cidade={cidade} setCidade={setCidade} buscarClima={buscarClima} />
       {clima && <Clima clima={clima} />}
       {previsao.length > 0 && <Previsao previsoes={previsao} />}
-      {/* {localizacao && (
-        <div>
-          <p>Latitude: {localizacao.lat}</p>
-          <p>Longitude: {localizacao.lon}</p>
-        </div>
-      )} */}
+      {erro && <p className="erro">{erro}</p>}{" "}
     </ClimaContainer>
   );
 }

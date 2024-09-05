@@ -1,21 +1,19 @@
 import styled from "styled-components";
 
-export const ClimaInformacao = styled.div `
-text-align:center;
+export const ClimaInformacao = styled.div`
+  text-align: center;
 
-
-h3 {
+  h3 {
     font-size: 1.5rem;
     margin-bottom: 10px;
-}
+  }
 
-img {
+  img {
     width: 80px;
     height: 80px;
     margin-bottom: 10px;
-}
- p {
-    margin-bottom:5px;
- }
-
+  }
+  p {
+    margin-bottom: 5px;
+  }
 `;
